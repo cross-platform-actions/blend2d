@@ -128,11 +128,11 @@ jobs:
                --build-type=${{matrix.build_type}}
                --build-defs=${{matrix.defs}}
 
-      - name: Setup tmate session
-        uses: mxschmitt/action-tmate@v3
-        with:
-          detached: true
-          limit-access-to-actor: true
+      # - name: Setup tmate session
+      #   uses: mxschmitt/action-tmate@v3
+      #   with:
+      #     detached: true
+      #     limit-access-to-actor: true
 
       - name: "Build & Test in VM"
         if: ${{matrix.host}}
