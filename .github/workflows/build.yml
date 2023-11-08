@@ -134,8 +134,11 @@ jobs:
       #     detached: true
       #     limit-access-to-actor: true
 
-      - name: SIP
-        run: csrutil status
+      - name: test
+        run: |
+          csrutil status
+          sudo dtruss ls
+
 
       # - name: "Build & Test in VM"
       #   if: ${{matrix.host}}
