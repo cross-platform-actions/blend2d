@@ -136,7 +136,7 @@ jobs:
 
       - name: "Build & Test in VM"
         if: ${{matrix.host}}
-        uses: cross-platform-actions/action@master
+        uses: cross-platform-actions/action@dtrace
         with:
           operating_system: ${{matrix.os}}
           architecture: ${{matrix.arch}}
