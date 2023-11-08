@@ -137,6 +137,7 @@ jobs:
           version: ${{matrix.osver}}
           sync_files: runner-to-vm
           shell: bash
+          hypervisor: qemu
           run: |
             set -e
 
