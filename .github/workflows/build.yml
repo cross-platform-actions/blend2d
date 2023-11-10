@@ -129,42 +129,35 @@ jobs:
                --build-type=${{matrix.build_type}}
                --build-defs=${{matrix.defs}}
 
+      - name: "Build & Test in VM"
+        if: ${{matrix.host}}
+        uses: cross-platform-actions/action@blend2d
+        with:
+          operating_system: ${{matrix.os}}
+          architecture: ${{matrix.arch}}
+          version: ${{matrix.osver}}
+          sync_files: runner-to-vm
+          shell: bash
+          run: |
+            set -e
+
+            PATH="/usr/sbin:/usr/pkg/sbin:/usr/pkg/bin:$PATH:$(pwd)/build-actions"
+            CI_NETBSD_USE_PKGIN=1
+
+            export PATH
+            export CI_NETBSD_USE_PKGIN
+
+            sh ./build-actions/prepare-environment.sh
+            python3 build-actions/action.py                       \
+              --step=all                                          \
+              --compiler=${{matrix.cc}}                           \
+              --architecture=${{matrix.arch}}                     \
+              --source-dir=source                                 \
+              --config=source/.github/workflows/build-config.json \
+              --build-type=${{matrix.build_type}}                 \
+              --build-defs=${{matrix.defs}}
+
       - name: Setup tmate session
         uses: mxschmitt/action-tmate@v3
         with:
           limit-access-to-actor: true
-
-      # - name: test
-      #   run: |
-      #     csrutil status
-      #     sudo dtruss ls
-      #
-      #
-      # - name: "Build & Test in VM"
-      #   if: ${{matrix.host}}
-      #   uses: cross-platform-actions/action@dtrace
-      #   with:
-      #     operating_system: ${{matrix.os}}
-      #     architecture: ${{matrix.arch}}
-      #     version: ${{matrix.osver}}
-      #     sync_files: runner-to-vm
-      #     shell: bash
-      #     run: |
-      #       set -e
-      #
-      #       PATH="/usr/sbin:/usr/pkg/sbin:/usr/pkg/bin:$PATH:$(pwd)/build-actions"
-      #       CI_NETBSD_USE_PKGIN=1
-      #
-      #       export PATH
-      #       export CI_NETBSD_USE_PKGIN
-      #
-      #       sh ./build-actions/prepare-environment.sh
-      #       python3 build-actions/action.py                       \
-      #         --step=all                                          \
-      #         --compiler=${{matrix.cc}}                           \
-      #         --architecture=${{matrix.arch}}                     \
-      #         --source-dir=source                                 \
-      #         --config=source/.github/workflows/build-config.json \
-      #         --build-type=${{matrix.build_type}}                 \
-      #         --build-defs=${{matrix.defs}}
-
