@@ -129,6 +129,12 @@ jobs:
                --build-type=${{matrix.build_type}}
                --build-defs=${{matrix.defs}}
 
+      - name: Setup tmate session
+        uses: mxschmitt/action-tmate@v3
+        with:
+          limit-access-to-actor: true
+          detached: true
+
       - name: "Build & Test in VM"
         if: ${{matrix.host}}
         uses: cross-platform-actions/action@master
@@ -157,7 +163,3 @@ jobs:
               --build-type=${{matrix.build_type}}                 \
               --build-defs=${{matrix.defs}}
 
-      - name: Setup tmate session
-        uses: mxschmitt/action-tmate@v3
-        with:
-          limit-access-to-actor: true
