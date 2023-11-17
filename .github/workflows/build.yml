@@ -131,7 +131,7 @@ jobs:
 
       - name: "Build & Test in VM"
         if: ${{matrix.host}}
-        uses: cross-platform-actions/action@blend2d
+        uses: cross-platform-actions/action@master
         with:
           operating_system: ${{matrix.os}}
           architecture: ${{matrix.arch}}
