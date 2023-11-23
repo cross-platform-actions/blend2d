@@ -129,11 +129,42 @@ jobs:
                --build-type=${{matrix.build_type}}
                --build-defs=${{matrix.defs}}
 
-      - name: Setup tmate session
-        uses: mxschmitt/action-tmate@v3
-        with:
-          limit-access-to-actor: true
-          detached: true
+      - name: Setup RDP
+        run: |
+          sudo dscl . -create /Users/vncuser
+          sudo dscl . -create /Users/vncuser UserShell /bin/bash
+          sudo dscl . -create /Users/vncuser RealName "VNC User"
+          sudo dscl . -create /Users/vncuser UniqueID 1001
+          sudo dscl . -create /Users/vncuser PrimaryGroupID 80
+          sudo dscl . -create /Users/vncuser NFSHomeDirectory /Users/vncuser
+          sudo dscl . -passwd /Users/vncuser foobar
+          sudo dscl . -passwd /Users/vncuser foobar
+          sudo createhomedir -c -u vncuser > /dev/null
+
+          sudo /System/Library/CoreServices/RemoteManagement/ARDAgent.app/Contents/Resources/kickstart \
+            -activate \
+            -restart -agent \
+            -configure \
+              -access -on \
+              -clientopts -setvnclegacy -vnclegacy yes \
+              -clientopts -setvncpw -vncpw foobar \
+              -privs -all
+
+      - name: Setup ngrok
+        run: |
+          brew install --cask ngrok
+          ngrok tcp 5900 \
+            --authtoken "${{ secrets.NGROK_TOKEN }}" \
+            --log /tmp/ngrok.log \
+            --region eu &
+          sleep 10
+          grep -oE "tcp://(.+)" /tmp/ngrok.log | sed "s/tcp:\/\//ssh root@/" | sed "s/:/ -p /"
+
+      # - name: Setup tmate session
+      #   uses: mxschmitt/action-tmate@v3
+      #   with:
+      #     limit-access-to-actor: true
+      #     detached: true
 
       - name: "Build & Test in VM"
         if: ${{matrix.host}}
@@ -162,4 +193,3 @@ jobs:
               --config=source/.github/workflows/build-config.json \
               --build-type=${{matrix.build_type}}                 \
               --build-defs=${{matrix.defs}}
-
