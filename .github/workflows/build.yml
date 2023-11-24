@@ -158,7 +158,7 @@ jobs:
             --log /tmp/ngrok.log \
             --region eu &
           sleep 10
-          grep -oE "tcp://(.+)" /tmp/ngrok.log | sed "s/tcp:\/\//open vnc://vncuser:foobar@/"
+          grep -oE "tcp://(.+)" /tmp/ngrok.log | sed "s#tcp://#open vnc://vncuser:foobar@#"
 
       # - name: Setup tmate session
       #   uses: mxschmitt/action-tmate@v3
