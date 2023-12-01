@@ -11,7 +11,7 @@ jobs:
     timeout-minutes: 2
     if: github.event.workflow_run.conclusion == 'success'
     steps:
-      - run: echo ${{ github.event.workflow_run.head_branch }}
+      - run: echo '${{ github.event.workflow_run.head_branch }}'
 
       # - name: Extract Version
       #   id: version
