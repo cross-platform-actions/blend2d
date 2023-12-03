@@ -23,7 +23,7 @@ jobs:
           set -x
           tag='${{ github.event.workflow_run.head_branch }}'
 
-          if echo "$tag" | grep -E '^v\d+\.\d+\.\d+(-.+)?'; then
+          if echo "$tag" | grep -Eq '^v'; then
             echo valid=true >> "$GITHUB_OUTPUT"
             echo version="$(echo "$tag" | sed 's/^v//')" >> "$GITHUB_OUTPUT"
           fi
