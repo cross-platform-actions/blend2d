@@ -24,7 +24,7 @@ jobs:
         id: extract_changelog
         with:
          file: changelog.md
-         pattern: '\[0.21.1\].+'
+         pattern: '\[Unreleased\].+'
          no-print-matched-heading: true
 
       - run: printf '${{ steps.extract_changelog.outputs.markdown }}'
