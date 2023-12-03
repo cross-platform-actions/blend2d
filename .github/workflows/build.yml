@@ -14,11 +14,16 @@ jobs:
     steps:
       - run: true
 
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
       - name: Extract changelog
         uses: sean0x42/markdown-extract@v2
         id: extract_changelog
         with:
-         file: /github/workspace/changelog.md
+         file: changelog.md
          pattern: '\[0.21.1\].+'
          no-print-matched-heading: true
 
