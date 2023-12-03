@@ -16,12 +16,15 @@ jobs:
       - name: Validate version
         id: version
         run: |
+          set -x
           tag='${{ github.event.workflow_run.head_branch }}'
 
           if echo "$tag" | grep -Eq 'v\d+\.\d+\.\d+(-.+)?'; then
             echo valid=true >> "$GITHUB_OUTPUT"
             echo version="$(echo "$tag" | sed 's/^v//')" >> "$GITHUB_OUTPUT"
           fi
+
+      - run: echo ${{ steps.version.outputs.valid }}
 
       - name: Extract changelog
         uses: sean0x42/markdown-extract@v2
@@ -30,8 +33,6 @@ jobs:
          file: changelog.md
          pattern: '\[${{ steps.version.outputs.version }}\].+'
          no-print-matched-heading: true
-
-      - run: echo ${{ steps.version.outputs.valid }}
 
       - name: Create release
         if: steps.version.outputs.valid
