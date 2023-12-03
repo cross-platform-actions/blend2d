@@ -20,7 +20,7 @@ jobs:
 
           if echo "$tag" | grep -Eq 'v\d+\.\d+\.\d+(-.+)?'; then
             echo valid=true >> "$GITHUB_OUTPUT"
-            echo version="$(echo "$tag" | sed 's/^v//')"
+            echo version="$(echo "$tag" | sed 's/^v//')" >> "$GITHUB_OUTPUT"
           fi
 
       - name: Extract changelog
@@ -30,6 +30,8 @@ jobs:
          file: changelog.md
          pattern: '\[${{ steps.version.outputs.version }}\].+'
          no-print-matched-heading: true
+
+      - run: echo ${{ steps.version.outputs.valid }}
 
       - name: Create release
         if: steps.version.outputs.valid
