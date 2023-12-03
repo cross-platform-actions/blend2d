@@ -9,6 +9,7 @@ defaults:
 
 jobs:
   foo:
+    runs-on: ubuntu-latest
     steps:
       - run: true
 
