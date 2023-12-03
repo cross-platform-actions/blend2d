@@ -22,6 +22,8 @@ jobs:
          pattern: '\[0.21.1\].+'
          no-print-matched-heading: true
 
+      - run: printf '${{ steps.extract_changelog.outputs.markdown }}'
+
 # jobs:
 #   build:
 #     strategy:
